@@ -1,0 +1,353 @@
+/* LIBVIO Premium Dark Theme */
+:root {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-primary: #ffffff;
+    --text-secondary: #aaaaaa;
+    --accent-color: #f5c518;
+    /* Gold/Yellow */
+    --hover-overlay: rgba(255, 255, 255, 0.1);
+    --nav-height: 70px;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* Navbar */
+.navbar {
+    background-color: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(10px);
+    height: var(--nav-height);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-content {
+    max-width: 1400px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--accent-color);
+    letter-spacing: 1px;
+}
+
+.logo svg {
+    width: 30px;
+    height: 30px;
+    fill: var(--accent-color);
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li a {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: 8px 0;
+    position: relative;
+}
+
+.nav-links li a.active,
+.nav-links li a:hover {
+    color: var(--text-primary);
+}
+
+.nav-links li a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--accent-color);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    background-color: var(--hover-overlay);
+    color: var(--text-primary);
+}
+
+/* Search */
+.search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: #2a2a2a;
+    border-radius: 20px;
+    /* Pill shape */
+    padding: 2px 10px;
+    transition: background-color 0.2s;
+}
+
+.search-wrapper:focus-within {
+    background-color: #333;
+    box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+.search-input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    padding: 8px;
+    width: 200px;
+    /* Always visible */
+    outline: none;
+    font-size: 14px;
+}
+
+/* User Menu */
+.user-menu {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    /* Reduced from 120% to prevent gap */
+    right: 0;
+    background-color: #252525;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 8px 0;
+    min-width: 160px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    display: none;
+    flex-direction: column;
+    z-index: 1002;
+    overflow: hidden;
+    margin-top: 0;
+    /* Removed margin to prevent gaps */
+}
+
+/* Invisible bridge for hover stability - applied to both user-menu li and div */
+.user-menu::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    /* Extended bridge height */
+    z-index: 1001;
+}
+
+.user-menu:hover .dropdown-menu {
+    display: flex;
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #333;
+    color: var(--text-primary);
+}
+
+/* Main Layout */
+.main-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    width: 100%;
+}
+
+/* Carousel */
+.hero-carousel {
+    position: relative;
+    width: 100%;
+    height: 520px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 50px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out, transform 8s linear;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.0);
+}
+
+.carousel-slide.active {
+    opacity: 1;
+    transform: scale(1.05);
+    /* Subtle zoom effect */
+}
+
+.slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #121212 0%, rgba(18, 18, 18, 0.6) 40%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px;
+}
+
+.slide-content h2 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.slide-btn {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: #000;
+    font-weight: 700;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 16px;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.slide-btn:hover {
+    background-color: #ffdb4d;
+    transform: translateY(-2px);
+}
+
+/* Section Title */
+.section-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    border-left: 5px solid var(--accent-color);
+    padding-left: 15px;
+    color: var(--text-primary);
+}
+
+/* Grid */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 30px 20px;
+}
+
+.movie-card {
+    display: block;
+    position: relative;
+    transition: transform 0.3s;
+}
+
+.movie-card:hover {
+    transform: translateY(-8px);
+    z-index: 2;
+}
+
+.poster-wrapper {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 2/3;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    margin-bottom: 12px;
+}
+
+.movie-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rating-tag {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: var(--accent-color);
+    color: #000;
+    font-weight: 800;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.movie-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #eee;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-meta {
+    font-size: 13px;
+    color: #777;
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid #333;
+    margin-top: 80px;
+    padding: 40px;
+    text-align: center;
+    color: #666;
+}

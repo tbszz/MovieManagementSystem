@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+    <constant name="struts.multipart.maxSize" value="16106127360" /> <!-- 15GB -->
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.objectFactory" value="spring" />
+    <constant name="struts.action.excludePattern" value=".*\.css,.*\.js,.*\.jpg,.*\.png,.*\.gif,.*\.webp,.*\.jsp,/static/.*" />
+    <constant name="struts.custom.i18n.resources" value="messages" />
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+
+    <package name="default" namespace="/" extends="struts-default">
+        <interceptors>
+            <interceptor-stack name="i18nStack">
+                <interceptor-ref name="i18n">
+                    <param name="parameterName">request_locale</param>
+                    <param name="requestOnlyParameterName">request_locale</param>
+                </interceptor-ref>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="i18nStack"/>
+
+        <default-action-ref name="index" />
+        <global-results>
+            <result name="error">/error.jsp</result>
+            <result name="login" type="redirect">/login.jsp</result>
+        </global-results>
+
+        <action name="index" class="movieAction" method="home">
+            <result name="home">/WEB-INF/content/home.jsp</result>
+            <result name="login">/login.jsp</result>
+        </action>
+
+        <action name="movie_list" class="movieAction" method="list">
+             <result name="list">/WEB-INF/content/movie_list.jsp</result>
+        </action>
+        
+        <action name="login" class="userAction" method="login">
+            <result name="admin_success" type="redirectAction">
+                <param name="actionName">index</param>
+                <param name="namespace">/admin</param>
+            </result>
+            <result name="user_success" type="redirectAction">
+                <param name="actionName">index</param>
+                <param name="namespace">/</param>
+            </result>
+            <result name="input">/login.jsp</result>
+        </action>
+        
+        <action name="logout" class="userAction" method="logout">
+            <result name="input" type="redirectAction">
+                <param name="actionName">login</param>
+                <param name="method">login</param>
+            </result>
+        </action>
+
+        <action name="switchLanguage" class="languageAction" method="switchLanguage">
+            <result name="success" type="redirect">${returnUrl}</result>
+        </action>
+
+        <action name="news_list" class="newsAction" method="list">
+             <result name="list">/WEB-INF/content/news_list.jsp</result>
+        </action>
+
+        <action name="login_page">
+            <result>/login.jsp</result>
+        </action>
+
+        <action name="privacy" class="userAction" method="privacy">
+            <result name="privacy">/privacy.jsp</result>
+        </action>
+
+        <action name="help" class="userAction" method="help">
+            <result name="help">/help.jsp</result>
+        </action>
+
+        <action name="register_input" class="userAction" method="registerInput">
+             <result name="register_input">/register.jsp</result>
+        </action>
+
+        <action name="register" class="userAction" method="register">
+             <result name="register_success" type="redirectAction">login_page</result>
+             <result name="register_input">/register.jsp</result>
+        </action>
+    </package>
+
+    <package name="admin" namespace="/admin" extends="struts-default">
+        <interceptors>
+            <interceptor name="auth" class="authInterceptor"/>
+            <interceptor-stack name="authStack">
+                <interceptor-ref name="i18n">
+                    <param name="parameterName">request_locale</param>
+                    <param name="requestOnlyParameterName">request_locale</param>
+                    <param name="attributeName">WW_TRANS_I18N_LOCALE</param>
+                </interceptor-ref>
+                <interceptor-ref name="auth"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        
+        <default-interceptor-ref name="authStack"/>
+        
+        <global-results>
+            <result name="login" type="redirectAction">
+                <param name="actionName">index</param>
+                <param name="namespace">/</param>
+            </result>
+            <result name="error">/error.jsp</result>
+        </global-results>
+
+        <action name="index" class="com.movie.action.DashboardAction">
+            <result name="success">/WEB-INF/content/admin/dashboard.jsp</result>
+        </action>
+
+        <!-- Comment Actions -->
+        <action name="comment_*" class="commentAction" method="{1}">
+             <result name="list">/WEB-INF/content/admin/comment_mgr.jsp</result>
+             <result name="redirect_list" type="redirectAction">comment_list</result>
+             <allowed-methods>list,delete</allowed-methods>
+        </action>
+
+        <!-- Category Actions -->
+        <action name="category_*" class="categoryAction" method="{1}">
+            <result name="list">/WEB-INF/content/admin/category_mgr.jsp</result>
+            <result name="input">/WEB-INF/content/admin/category_form.jsp</result>
+            <result name="redirect_list" type="redirectAction">category_list</result>
+            <allowed-methods>list,input,save,delete</allowed-methods>
+        </action>
+
+        <!-- News Actions -->
+        <action name="news_*" class="newsAction" method="{1}">
+            <result name="list">/WEB-INF/content/admin/news_mgr.jsp</result>
+            <result name="input">/WEB-INF/content/admin/news_form.jsp</result>
+            <result name="redirect_list" type="redirectAction">news_list</result>
+            <allowed-methods>list,input,save,delete</allowed-methods>
+        </action>
+
+        <!-- Carousel Actions -->
+        <action name="carousel_*" class="carouselAction" method="{1}">
+            <result name="list">/WEB-INF/content/admin/carousel_mgr.jsp</result>
+            <result name="input">/WEB-INF/content/admin/carousel_form.jsp</result>
+            <result name="redirect_list" type="redirectAction">carousel_list</result>
+            <interceptor-ref name="authStack">
+                <param name="fileUpload.maximumSize">16106127360</param>
+            </interceptor-ref>
+            <allowed-methods>list,input,save,delete</allowed-methods>
+        </action>
+
+        <!-- Movie Actions -->
+        <action name="movie_*" class="movieAction" method="{1}">
+            <result name="list">/WEB-INF/content/admin/movie_list.jsp</result>
+            <result name="input">/WEB-INF/content/admin/movie_add.jsp</result>
+            <result name="view">/WEB-INF/content/admin/movie_view.jsp</result>
+            <result name="redirect_list" type="redirectAction">movie_list</result>
+            <interceptor-ref name="authStack">
+                <param name="fileUpload.maximumSize">16106127360</param>
+            </interceptor-ref>
+            <allowed-methods>list,input,view,save,delete,batchDelete</allowed-methods>
+        </action>
+
+        <!-- User Actions -->
+        <action name="user_*" class="userAction" method="{1}">
+            <result name="list">/WEB-INF/content/admin/user_list.jsp</result>
+            <result name="input">/WEB-INF/content/admin/user_form.jsp</result>
+            <result name="redirect_list" type="redirectAction">user_list</result>
+            <allowed-methods>list,input,save,delete</allowed-methods>
+        </action>
+    </package>
+
+    <package name="user" namespace="/user" extends="struts-default">
+         <action name="user_*" class="userAction" method="{1}">
+             <result name="stats">/WEB-INF/content/user_stats.jsp</result>
+             <result name="export" type="stream">
+                 <param name="contentType">text/csv</param>
+                 <param name="inputName">exportStream</param>
+                 <param name="contentDisposition">attachment;filename="viewing_history.csv"</param>
+                 <param name="bufferSize">1024</param>
+             </result>
+             <allowed-methods>myStats,exportStats</allowed-methods>
+         </action>
+         
+         <action name="comment_*" class="commentAction" method="{1}">
+             <result name="list">/WEB-INF/content/admin/comment_mgr.jsp</result>
+             <result name="redirect_list" type="redirectAction">comment_list</result>
+             <result name="redirect_detail" type="redirectAction">
+                 <param name="actionName">movie_view</param>
+                 <param name="namespace">/user</param>
+                 <param name="id">${movieId}</param>
+             </result>
+             <allowed-methods>add,delete,list</allowed-methods>
+         </action>
+         
+         <action name="movie_*" class="movieAction" method="{1}">
+             <result name="view">/WEB-INF/content/movie_detail.jsp</result>
+             <result name="play">/WEB-INF/content/movie_play.jsp</result>
+             <result name="redirect_view" type="redirectAction">
+                 <param name="actionName">movie_view</param>
+                 <param name="id">${id}</param>
+             </result>
+             <allowed-methods>view,play,addRating</allowed-methods>
+         </action>
+    </package>
+</struts>
